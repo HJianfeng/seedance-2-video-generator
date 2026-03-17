@@ -6,7 +6,7 @@ description: Generates video via Loova Seedance 2.0 API (img2vid). Requires LOOV
 
 # Seedance 2.0 Video Generator
 
-Generate AI videos from text prompts or images using the Loova Seedance 2.0 API (img2vid). Submit a job, poll for completion, and get the video result.
+Generate AI videos from text prompts or images using the Loova Seedance 2.0 API (img2vid). Submit a job, poll for completion, and get the video result. **Generation may take up to 3 hours**; the script notifies the user and keeps polling until done.
 
 ## Capabilities
 

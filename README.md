@@ -4,6 +4,8 @@ End-to-end AI video generation using the Loova Seedance 2.0 API. Create videos f
 
 **ClawHub / OpenClaw** – Use this Skill when the user asks for Loova video, Seedance 2.0, or image-to-video generation.
 
+**Note:** Video generation can take **up to 3 hours** depending on server load. The script polls until the task completes and will notify the user at start.
+
 ## Overview
 
 - **Submit** – `POST https://api.loova.ai/v1/img2vid` to create a video generation task
