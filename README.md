@@ -1,6 +1,6 @@
 # Loova Seedance 2.0 Video Generation Skill
 
-End-to-end AI video generation using the Loova Seedance 2.0 API. Create videos from text prompts or image URLs via the img2vid API, with automatic job submission and result polling.
+End-to-end AI video generation using the Loova Seedance 2.0 API. Create videos from text prompts or local media (images/video/audio) via the img2vid API. Requests use **multipart/form-data** with File uploads, so OpenClaw users can attach files directly. Automatic job submission and result polling.
 
 **ClawHub / OpenClaw** – Use this Skill when the user asks for Loova video, Seedance 2.0, or image-to-video generation.
 
@@ -22,7 +22,7 @@ Upload this repository (or the skill folder) to ClawHub for OpenClaw. Expected s
 ├── requirements.txt  # Python deps (requests, python-dotenv)
 ├── .env.example       # Example env (LOOVA_API_KEY)
 └── scripts/
-    └── loova-img2vid.py   # Submit + poll script
+    └── run_seedance.py   # Submit + poll script
 ```
 
 ## Setup
@@ -68,13 +68,13 @@ The agent uses this Skill when the user mentions Loova video, Seedance 2.0, or i
 
 ```bash
 # Prompt only
-python scripts/loova-img2vid.py --prompt "Camera slowly pushes in"
+python scripts/run_seedance.py --prompt "Camera slowly pushes in"
 
 # With options
-python scripts/loova-img2vid.py --prompt "Person smiles" --model jimeng-video-seedance-2.0-fast --duration 8 --ratio "16:9"
+python scripts/run_seedance.py --prompt "Person smiles" --model jimeng-video-seedance-2.0-fast --duration 8 --ratio "16:9"
 
-# With image URL(s)
-python scripts/loova-img2vid.py --prompt "Person turns head" --files "https://example.com/a.jpg"
+# With local image file(s)
+python scripts/run_seedance.py --prompt "Person turns head" --files "a.jpg"
 ```
 
 Output: the script prints the final result JSON (including the video URL when the task succeeds).
@@ -88,6 +88,6 @@ Output: the script prints the final result JSON (including the video URL when th
 | `--duration`| No       | Duration in seconds, 4–15 (default 5)                                       |
 | `--ratio`   | No       | Aspect ratio (default `16:9`)                                               |
 | `--function-mode` | No | `first_last_frames` or `omni_reference`                              |
-| `--files`   | No       | Comma-separated media URLs                                                   |
+| `--files`   | No       | Comma-separated local file paths (sent as multipart FormData File uploads; images/video/audio) |
 
 See [reference.md](reference.md) for full API details and [QUICK_START.md](QUICK_START.md) for a minimal setup guide.

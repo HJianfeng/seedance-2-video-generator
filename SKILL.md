@@ -10,20 +10,20 @@ Generate AI videos from text prompts or images using the Loova Seedance 2.0 API 
 ## Capabilities
 
 1. **Image/Text to Video** – Loova img2vid API with Seedance 2.0 or Seedance 2.0 Fast
-2. **Prompt-driven** – Supports @ reference syntax and optional media file URLs
+2. **Prompt-driven** – Supports @ reference syntax and optional media files as FormData (File uploads; works with OpenClaw image/video/audio uploads)
 3. **Configurable** – Duration (4–15s), aspect ratio, function mode (first/last frame or omni reference)
 
 ## Quick Start
 
 ```bash
 # Generate video from prompt only
-python scripts/loova-img2vid.py --prompt "Camera slowly pushes in, person smiles"
+python scripts/run_seedance.py --prompt "Camera slowly pushes in, person smiles"
 
-# With image URL(s)
-python scripts/loova-img2vid.py --prompt "Person turns head" --files "https://example.com/photo.jpg" --duration 8
+# With local file(s) (sent as FormData File uploads)
+python scripts/run_seedance.py --prompt "Person turns head" --files "photo.jpg" --duration 8
 
 # Fast model, custom ratio
-python scripts/loova-img2vid.py --prompt "A cat in the sun" --model jimeng-video-seedance-2.0-fast --ratio "16:9"
+python scripts/run_seedance.py --prompt "A cat in the sun" --model jimeng-video-seedance-2.0-fast --ratio "16:9"
 ```
 
 ## Setup
@@ -61,34 +61,34 @@ Dependencies: `requests`, `python-dotenv`. No FFmpeg or other system binaries re
 ### 1. Text to Video (prompt only)
 
 ```bash
-python scripts/loova-img2vid.py --prompt "A futuristic city at night with flying cars" --duration 5
+python scripts/run_seedance.py --prompt "A futuristic city at night with flying cars" --duration 5
 ```
 
 ### 2. Image to Video (with reference image URL)
 
 ```bash
-python scripts/loova-img2vid.py --prompt "Person slowly smiles" --files "https://your-cdn.com/portrait.jpg" --duration 8
+python scripts/run_seedance.py --prompt "Person slowly smiles" --files "https://your-cdn.com/portrait.jpg" --duration 8
 ```
 
 ### 3. Multiple Reference Images
 
 ```bash
-python scripts/loova-img2vid.py --prompt "Smooth transition between scenes" --files "https://example.com/a.jpg,https://example.com/b.jpg" --function-mode first_last_frames
+python scripts/run_seedance.py --prompt "Smooth transition between scenes" --files "https://example.com/a.jpg,https://example.com/b.jpg" --function-mode first_last_frames
 ```
 
 ### 4. Fast Model, Custom Aspect Ratio
 
 ```bash
-python scripts/loova-img2vid.py --prompt "Ocean waves" --model jimeng-video-seedance-2.0-fast --ratio "9:16" --duration 6
+python scripts/run_seedance.py --prompt "Ocean waves" --model jimeng-video-seedance-2.0-fast --ratio "9:16" --duration 6
 ```
 
 ## Scripts Reference
 
 | Script | Description |
 |--------|-------------|
-| `scripts/loova-img2vid.py` | Submit img2vid task and poll until done; prints result JSON (includes video URL on success) |
+| `scripts/run_seedance.py` | Submit img2vid task and poll until done; prints result JSON (includes video URL on success) |
 
-Arguments: `--prompt` (required), `--model`, `--duration`, `--ratio`, `--function-mode`, `--files` (comma-separated URLs).
+Arguments: `--prompt` (required), `--model`, `--duration`, `--ratio`, `--function-mode`, `--files` (comma-separated local paths; sent as multipart File uploads).
 
 ## API Flow
 
@@ -103,7 +103,7 @@ Arguments: `--prompt` (required), `--model`, `--duration`, `--ratio`, `--functio
 | `model` | Yes | `jimeng-video-seedance-2.0` | `jimeng-video-seedance-2.0` or `jimeng-video-seedance-2.0-fast` |
 | `params.prompt` | Yes | — | Prompt; supports @ reference syntax |
 | `params.functionMode` | No | — | `first_last_frames` or `omni_reference` |
-| `params.file_paths` | No | — | List of media file URLs |
+| (form) `files` | No | — | Multipart File parts (images/video/audio); sent as FormData |
 | `params.ratio` | No | `16:9` | Aspect ratio |
 | `params.duration` | No | `5` | Duration in seconds (4–15) |
 

@@ -9,8 +9,9 @@
 
 - **URL**: `https://api.loova.ai/v1/img2vid`
 - **Method**: POST
-- **Headers**: `Authorization: Bearer <API_KEY>`, `Content-Type: application/json`
-- **Body**: See table below.
+- **Headers**: `Authorization: Bearer <API_KEY>`. Use **multipart/form-data** (do not use `Content-Type: application/json`).
+- **Form fields**: `model` (string), `params` (JSON string of prompt, ratio, duration, functionMode).
+- **Form files**: `files` – one or more File parts (images, video, or audio). Fits OpenClaw file uploads.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -18,7 +19,7 @@
 | `params` | object | Yes | Generation parameters |
 | `params.prompt` | string | Yes | Prompt; supports @ reference syntax |
 | `params.functionMode` | string | No | `first_last_frames` (first/last frame) / `omni_reference` (omni mode) |
-| `params.file_paths` | array | No | List of media file URLs |
+| (multipart) `files` | File[] | No | Media files (images/video/audio) sent as multipart/form-data File parts; same as OpenClaw uploads |
 | `params.ratio` | string | No | Video aspect ratio, default `16:9` |
 | `params.aspect_ratio` | string | No | Video aspect ratio (legacy), default `16:9` |
 | `params.duration` | number/string | No | Duration in seconds, 4–15, default `5` |

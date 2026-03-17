@@ -32,19 +32,19 @@ pip install -r requirements.txt
 **Text prompt only (no input image):**
 
 ```bash
-python scripts/loova-img2vid.py --prompt "Camera slowly pushes in, person smiles"
+python scripts/run_seedance.py --prompt "Camera slowly pushes in, person smiles"
 ```
 
 **With optional parameters:**
 
 ```bash
-python scripts/loova-img2vid.py --prompt "A cat walking in the sun" --duration 8 --ratio "16:9"
+python scripts/run_seedance.py --prompt "A cat walking in the sun" --duration 8 --ratio "16:9"
 ```
 
-**With image URL(s):**
+**With local image file(s):**
 
 ```bash
-python scripts/loova-img2vid.py --prompt "Person turns head" --files "https://example.com/photo.jpg"
+python scripts/run_seedance.py --prompt "Person turns head" --files "photo.jpg"
 ```
 
 The script submits the job, polls until the video is ready, and prints the result JSON (including the video URL when succeeded).
@@ -53,7 +53,7 @@ The script submits the job, polls until the video is ready, and prints the resul
 
 | Script | Description |
 |--------|-------------|
-| `scripts/loova-img2vid.py` | Submit img2vid job and poll for result (prompt, optional images, duration, ratio) |
+| `scripts/run_seedance.py` | Submit img2vid job and poll for result (prompt, optional images, duration, ratio) |
 
 ## Parameters
 
@@ -64,6 +64,6 @@ The script submits the job, polls until the video is ready, and prints the resul
 | `--duration` | No | `5` | Duration in seconds (4–15) |
 | `--ratio` | No | `16:9` | Aspect ratio |
 | `--function-mode` | No | — | `first_last_frames` or `omni_reference` |
-| `--files` | No | — | Comma-separated media URLs |
+| `--files` | No | — | Comma-separated local file paths (sent as FormData File uploads; images/video/audio) |
 
 For full API details, see [reference.md](reference.md). For ClawHub/OpenClaw usage, see [SKILL.md](SKILL.md).
