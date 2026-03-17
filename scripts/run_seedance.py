@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Loova Seedance 2.0 img2vid script.
+Seedance 2.0 Video Generator – Loova img2vid script.
 Loads LOOVA_API_KEY from environment or .env file.
 Usage: python scripts/run_seedance.py --prompt "prompt" [--model ...] [--duration 5] [--ratio "16:9"] [--files "path1.jpg,path2.jpg"]
 Sends request as multipart/form-data: params as JSON field, media as File parts (images/video/audio).
@@ -172,7 +172,7 @@ def poll_result(api_key: str, task_id: str) -> dict:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Loova Seedance 2.0 img2vid")
+    parser = argparse.ArgumentParser(description="Seedance 2.0 Video Generator")
     parser.add_argument("--prompt", required=True, help="Prompt text")
     parser.add_argument("--model", default="jimeng-video-seedance-2.0", help="Model name")
     parser.add_argument("--duration", type=int, default=5, help="Duration in seconds (4-15)")

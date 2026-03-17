@@ -1,4 +1,4 @@
-# Loova Seedance 2.0 Video Generation Skill
+# Seedance 2.0 Video Generator
 
 End-to-end AI video generation using the Loova Seedance 2.0 API. Create videos from text prompts or local media (images/video/audio) via the img2vid API. Requests use **multipart/form-data** with File uploads, so OpenClaw users can attach files directly. Automatic job submission and result polling.
 

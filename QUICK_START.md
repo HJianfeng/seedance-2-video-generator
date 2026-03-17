@@ -1,4 +1,4 @@
-# Quick Start – Loova Seedance 2.0 Video Generation
+# Quick Start – Seedance 2.0 Video Generator
 
 Generate AI videos from text prompts or images using the Loova Seedance 2.0 API.
 

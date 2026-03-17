@@ -1,9 +1,10 @@
 ---
-name: loova-seedance-video
+name: seedance-2-video-generator
+displayName: Seedance 2.0 Video Generator
 description: Generates video via Loova Seedance 2.0 API (img2vid). Requires LOOVA_API_KEY from .env or environment (get API key at loova.ai). Use when the user asks for Loova, Seedance 2.0, image-to-video, or img2vid.
 ---
 
-# Loova Seedance 2.0 Video Generation Skill
+# Seedance 2.0 Video Generator
 
 Generate AI videos from text prompts or images using the Loova Seedance 2.0 API (img2vid). Submit a job, poll for completion, and get the video result.
 
