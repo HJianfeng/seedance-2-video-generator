@@ -15,7 +15,7 @@
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `model` | string | Yes | `jimeng-video-seedance-2.0` or `jimeng-video-seedance-2.0-fast` |
+| `model` | string | Yes | `seedance_2_0` or `seedance_2_0_fast` |
 | `params` | object | Yes | Generation parameters |
 | `params.prompt` | string | Yes | Prompt; supports @ reference syntax |
 | `params.functionMode` | string | No | `first_last_frames` (first/last frame) / `omni_reference` (omni mode) |

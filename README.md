@@ -73,7 +73,7 @@ The agent uses this Skill when the user mentions Loova video, Seedance 2.0, or i
 python scripts/run_seedance.py --prompt "Camera slowly pushes in"
 
 # With options
-python scripts/run_seedance.py --prompt "Person smiles" --model jimeng-video-seedance-2.0-fast --duration 8 --ratio "16:9"
+python scripts/run_seedance.py --prompt "Person smiles" --model seedance_2_0_fast --duration 8 --ratio "16:9"
 
 # With local image file(s)
 python scripts/run_seedance.py --prompt "Person turns head" --files "a.jpg"
@@ -86,7 +86,7 @@ Output: the script prints the final result JSON (including the video URL when th
 | Parameter    | Required | Description                                                                 |
 |-------------|----------|-----------------------------------------------------------------------------|
 | `--prompt`  | Yes      | Text prompt for the video                                                   |
-| `--model`   | No       | `jimeng-video-seedance-2.0` (default) or `jimeng-video-seedance-2.0-fast`   |
+| `--model`   | No       | `seedance_2_0` (default) or `seedance_2_0_fast`   |
 | `--duration`| No       | Duration in seconds, 4–15 (default 5)                                       |
 | `--ratio`   | No       | Aspect ratio (default `16:9`)                                               |
 | `--function-mode` | No | `first_last_frames` or `omni_reference`                              |

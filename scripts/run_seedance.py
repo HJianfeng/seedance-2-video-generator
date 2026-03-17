@@ -177,7 +177,7 @@ def poll_result(api_key: str, task_id: str) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Seedance 2.0 Video Generator")
     parser.add_argument("--prompt", required=True, help="Prompt text")
-    parser.add_argument("--model", default="jimeng-video-seedance-2.0", help="Model name")
+    parser.add_argument("--model", default="seedance_2_0", help="Model name")
     parser.add_argument("--duration", type=int, default=5, help="Duration in seconds (4-15)")
     parser.add_argument("--ratio", default="16:9", help="Aspect ratio")
     parser.add_argument("--function-mode", help="first_last_frames or omni_reference")

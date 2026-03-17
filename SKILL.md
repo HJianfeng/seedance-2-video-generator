@@ -24,7 +24,7 @@ python scripts/run_seedance.py --prompt "Camera slowly pushes in, person smiles"
 python scripts/run_seedance.py --prompt "Person turns head" --files "photo.jpg" --duration 8
 
 # Fast model, custom ratio
-python scripts/run_seedance.py --prompt "A cat in the sun" --model jimeng-video-seedance-2.0-fast --ratio "16:9"
+python scripts/run_seedance.py --prompt "A cat in the sun" --model seedance_2_0_fast --ratio "16:9"
 ```
 
 ## Setup
@@ -80,7 +80,7 @@ python scripts/run_seedance.py --prompt "Smooth transition between scenes" --fil
 ### 4. Fast Model, Custom Aspect Ratio
 
 ```bash
-python scripts/run_seedance.py --prompt "Ocean waves" --model jimeng-video-seedance-2.0-fast --ratio "9:16" --duration 6
+python scripts/run_seedance.py --prompt "Ocean waves" --model seedance_2_0_fast --ratio "9:16" --duration 6
 ```
 
 ## Scripts Reference
@@ -101,7 +101,7 @@ Arguments: `--prompt` (required), `--model`, `--duration`, `--ratio`, `--functio
 
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
-| `model` | Yes | `jimeng-video-seedance-2.0` | `jimeng-video-seedance-2.0` or `jimeng-video-seedance-2.0-fast` |
+| `model` | Yes | `seedance_2_0` | `seedance_2_0` or `seedance_2_0_fast` |
 | `params.prompt` | Yes | — | Prompt; supports @ reference syntax |
 | `params.functionMode` | No | — | `first_last_frames` or `omni_reference` |
 | (form) `files` | No | — | Multipart File parts (images/video/audio); sent as FormData |

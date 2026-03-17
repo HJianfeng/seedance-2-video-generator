@@ -60,7 +60,7 @@ The script submits the job, polls until the video is ready, and prints the resul
 | Option | Required | Default | Description |
 |--------|----------|---------|-------------|
 | `--prompt` | Yes | — | Text prompt for the video |
-| `--model` | No | `jimeng-video-seedance-2.0` | `jimeng-video-seedance-2.0` or `jimeng-video-seedance-2.0-fast` |
+| `--model` | No | `seedance_2_0` | `seedance_2_0` or `seedance_2_0_fast` |
 | `--duration` | No | `5` | Duration in seconds (4–15) |
 | `--ratio` | No | `16:9` | Aspect ratio |
 | `--function-mode` | No | — | `first_last_frames` or `omni_reference` |
