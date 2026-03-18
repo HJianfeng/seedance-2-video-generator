@@ -88,6 +88,11 @@ def validate_files_by_function_mode(paths: List[str], function_mode: Optional[st
             )
 
 
+def validate_prompt_required(prompt: Optional[str]) -> None:
+    if not prompt or not prompt.strip():
+        raise ValueError("prompt is required (non-empty).")
+
+
 def open_files_for_upload(paths: List[str]) -> List[Tuple[str, Tuple[str, Any, str]]]:
     """Open local files and return list of (form_key, (filename, fileobj, content_type)) for multipart upload."""
     result = []
@@ -185,6 +190,7 @@ def main() -> None:
     args = parser.parse_args()
     args.files = [p.strip() for p in args.files.split(",") if p.strip()] if args.files else None
 
+    validate_prompt_required(args.prompt)
     validate_files_by_function_mode(args.files or [], args.function_mode)
     api_key = get_api_key()
     task_id = submit_task(api_key, args)
