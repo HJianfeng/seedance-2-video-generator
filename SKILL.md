@@ -2,6 +2,9 @@
 name: seedance-2-ai-video-generator
 displayName: Seedance 2.0 AI Video Generator (Text to Video, Image to Video, Reference to Video)
 description: Generates video via Loova Seedance 2.0 API (Seedance 2.0 video). Requires LOOVA_API_KEY from .env or environment (get API key at loova.ai). Use when the user asks for Loova, Seedance 2.0, image-to-video, or Seedance 2.0 video.
+env:
+  required:
+    - LOOVA_API_KEY
 ---
 
 # Seedance 2.0 Video Generator
@@ -36,7 +39,7 @@ python scripts/run_seedance.py --prompt "A cat in the sun" --model seedance_2_0_
 
 ### Required API Key
 
-Obtain your API key after logging in at [https://loova.ai/](https://loova.ai/) (e.g. from browser DevTools: Network or Local Storage).
+Obtain your API key from your account after logging in at [https://loova.ai/](https://loova.ai/). Do not hardcode the key; use environment variables or `.env`.
 
 Add to your environment or `.env` file in the project root:
 
