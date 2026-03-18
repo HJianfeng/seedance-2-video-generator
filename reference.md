@@ -44,5 +44,8 @@ This is the **single** Seedance 2.0 generation endpoint for both:
 - **URL**: `https://api.loova.ai/v1/tasks?task_id=<task_id>`
 - **Method**: GET
 - **Headers**: `Authorization: Bearer <API_KEY>`
-- **Usage**: Poll until the task status is completed or failed, then read the video result (e.g. URL) from the response.
+- **Usage**:
+  - Clients (including OpenClaw) should **poll about once per minute** until the task status is completed or failed.
+  - Video generation can take up to **several hours**, so keep polling (or use a long timeout) accordingly.
+  - As soon as the status indicates success/completed and a video URL/result is available, clients (including OpenClaw) should **immediately surface the result to the end user** without additional delay.
 
