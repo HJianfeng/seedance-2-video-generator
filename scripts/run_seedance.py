@@ -109,6 +109,24 @@ def validate_prompt_required(prompt: Optional[str]) -> None:
         raise ValueError("prompt is required (non-empty).")
 
 
+def normalize_url_list(value: Any) -> Optional[List[str]]:
+    """
+    Normalize URL inputs to a list of strings.
+    - None / "" -> None
+    - "a,b" -> ["a", "b"]
+    - ["a", "b"] / ("a", "b") -> ["a", "b"]
+    """
+    if value is None:
+        return None
+    if isinstance(value, str):
+        items = [u.strip() for u in value.split(",") if u.strip()]
+        return items or None
+    if isinstance(value, (list, tuple)):
+        items = [str(u).strip() for u in value if str(u).strip()]
+        return items or None
+    raise ValueError(f"Expected URL(s) as string or list, got {type(value).__name__}")
+
+
 def validate_media_inputs_by_function_mode(
     *,
     file_paths: List[str],
@@ -212,18 +230,21 @@ def submit_task(api_key: str, args: argparse.Namespace) -> str:
     }
     if args.function_mode:
         params["functionMode"] = args.function_mode
-    if args.image_urls:
-        params["image_urls"] = args.image_urls
-    if args.video_urls:
-        params["video_urls"] = args.video_urls
-    if args.audio_urls:
-        params["audio_urls"] = args.audio_urls
+    image_urls = normalize_url_list(getattr(args, "image_urls", None))
+    video_urls = normalize_url_list(getattr(args, "video_urls", None))
+    audio_urls = normalize_url_list(getattr(args, "audio_urls", None))
+    if image_urls:
+        params["image_urls"] = image_urls
+    if video_urls:
+        params["video_urls"] = video_urls
+    if audio_urls:
+        params["audio_urls"] = audio_urls
 
     upload_paths = filter_files_by_url_overrides(
         file_paths=args.files or [],
-        image_urls=args.image_urls or [],
-        video_urls=args.video_urls or [],
-        audio_urls=args.audio_urls or [],
+        image_urls=image_urls or [],
+        video_urls=video_urls or [],
+        audio_urls=audio_urls or [],
     )
     file_tuples = open_files_for_upload(upload_paths) if upload_paths else []
     try:
@@ -304,9 +325,9 @@ def main() -> None:
     parser.add_argument("--audio-urls", help="Comma-separated audio URLs (no multipart upload)")
     args = parser.parse_args()
     args.files = [p.strip() for p in args.files.split(",") if p.strip()] if args.files else None
-    args.image_urls = [u.strip() for u in args.image_urls.split(",") if u.strip()] if args.image_urls else None
-    args.video_urls = [u.strip() for u in args.video_urls.split(",") if u.strip()] if args.video_urls else None
-    args.audio_urls = [u.strip() for u in args.audio_urls.split(",") if u.strip()] if args.audio_urls else None
+    args.image_urls = normalize_url_list(args.image_urls)
+    args.video_urls = normalize_url_list(args.video_urls)
+    args.audio_urls = normalize_url_list(args.audio_urls)
 
     validate_prompt_required(args.prompt)
     validate_media_inputs_by_function_mode(
