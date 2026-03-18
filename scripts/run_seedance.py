@@ -3,7 +3,7 @@
 Seedance 2.0 Video Generator – Loova Seedance 2.0 script.
 Loads LOOVA_API_KEY from environment or .env file.
 Usage: python scripts/run_seedance.py --prompt "prompt" [--model ...] [--duration 5] [--ratio "16:9"] [--files "path1.jpg,path2.jpg"] [--image-urls "https://...,..."] [--video-urls "..."] [--audio-urls "..."]
-Sends request as multipart/form-data: params as JSON field, media as File parts (images/video/audio).
+Sends request as multipart/form-data when uploading files; otherwise sends application/json.
 """
 import argparse
 import json
@@ -223,22 +223,9 @@ def get_api_key() -> str:
 
 
 def submit_task(api_key: str, args: argparse.Namespace) -> str:
-    params = {
-        "prompt": args.prompt,
-        "ratio": args.ratio,
-        "duration": args.duration,
-    }
-    if args.function_mode:
-        params["functionMode"] = args.function_mode
     image_urls = normalize_url_list(getattr(args, "image_urls", None))
     video_urls = normalize_url_list(getattr(args, "video_urls", None))
     audio_urls = normalize_url_list(getattr(args, "audio_urls", None))
-    if image_urls:
-        params["image_urls"] = image_urls
-    if video_urls:
-        params["video_urls"] = video_urls
-    if audio_urls:
-        params["audio_urls"] = audio_urls
 
     upload_paths = filter_files_by_url_overrides(
         file_paths=args.files or [],
@@ -250,11 +237,20 @@ def submit_task(api_key: str, args: argparse.Namespace) -> str:
     try:
         if file_tuples:
             # multipart/form-data (file upload)
-            data = {
-                "model": args.model,
-                "prompt": args.prompt,
-                "params": json.dumps(params),
-            }
+            data: List[Tuple[str, str]] = [
+                ("model", str(args.model)),
+                ("prompt", str(args.prompt)),
+                ("ratio", str(args.ratio)),
+                ("duration", str(args.duration)),
+            ]
+            if args.function_mode:
+                data.append(("functionMode", str(args.function_mode)))
+            for u in image_urls or []:
+                data.append(("image_urls", u))
+            for u in video_urls or []:
+                data.append(("video_urls", u))
+            for u in audio_urls or []:
+                data.append(("audio_urls", u))
             resp = requests.post(
                 VID_URL,
                 headers={"Authorization": f"Bearer {api_key}"},
@@ -264,10 +260,20 @@ def submit_task(api_key: str, args: argparse.Namespace) -> str:
             )
         else:
             # application/json (no file upload)
-            payload = {
+            payload: dict[str, Any] = {
                 "model": args.model,
-                "params": params,
+                "prompt": args.prompt,
+                "ratio": args.ratio,
+                "duration": args.duration,
             }
+            if args.function_mode:
+                payload["functionMode"] = args.function_mode
+            if image_urls:
+                payload["image_urls"] = image_urls
+            if video_urls:
+                payload["video_urls"] = video_urls
+            if audio_urls:
+                payload["audio_urls"] = audio_urls
             resp = requests.post(
                 VID_URL,
                 headers={

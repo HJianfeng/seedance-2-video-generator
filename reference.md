@@ -18,23 +18,23 @@ This is the **single** Seedance 2.0 generation endpoint for both:
   - With file upload (`files` provided): `Authorization: Bearer <API_KEY>` and use **multipart/form-data**
   - Without file upload: `Authorization: Bearer <API_KEY>`, `Content-Type: application/json`
 - **Body**:
-  - multipart/form-data: `model` (string), `params` (JSON string), optional `files` parts
-  - application/json: `{ "model": string, "params": object }`
+  - multipart/form-data: flat fields at the top level (`model`, `prompt`, etc.), optional `files` parts
+    - For list fields like `image_urls`, send **repeated form keys** (e.g. multiple `image_urls` entries)
+  - application/json: `{ "model": string, "prompt": string, ... }` (all params at the top level)
 
 
 | Field                 | Type          | Required | Description                                                                                       |
 | --------------------- | ------------- | -------- | ------------------------------------------------------------------------------------------------- |
 | `model`               | string        | Yes      | `seedance_2_0` or `seedance_2_0_fast`                                                             |
-| `params`              | object        | Yes      | Generation parameters                                                                             |
-| `params.prompt`       | string        | Yes      | Prompt; supports @ reference syntax                                                               |
-| `params.functionMode` | string        | No       | `first_last_frames` (first/last frame) / `omni_reference` (omni mode)                             |
+| `prompt`              | string        | Yes      | Prompt; supports @ reference syntax                                                               |
+| `functionMode`        | string        | No       | `first_last_frames` (first/last frame) / `omni_reference` (omni mode)                             |
 | (multipart) `files`   | File[]        | No       | Optional media files (images/video/audio) sent as multipart/form-data File parts                  |
-| `params.image_urls`   | string[]      | No       | Optional image URL list                                                                           |
-| `params.video_urls`   | string[]      | No       | Optional video URL list                                                                           |
-| `params.audio_urls`   | string[]      | No       | Optional audio URL list                                                                           |
-| `params.ratio`        | string        | No       | Video aspect ratio, default `16:9`                                                                |
-| `params.aspect_ratio` | string        | No       | Video aspect ratio (legacy), default `16:9`                                                       |
-| `params.duration`     | number/string | No       | Duration in seconds, 4–15, default `5`                                                            |
+| `image_urls`          | string[]      | No       | Optional image URL list                                                                           |
+| `video_urls`          | string[]      | No       | Optional video URL list                                                                           |
+| `audio_urls`          | string[]      | No       | Optional audio URL list                                                                           |
+| `ratio`               | string        | No       | Video aspect ratio, default `16:9`                                                                |
+| `aspect_ratio`        | string        | No       | Video aspect ratio (legacy), default `16:9`                                                       |
+| `duration`            | number/string | No       | Duration in seconds, 4–15, default `5`                                                            |
 
 
 **Response**: Contains `task_id` for polling the result.
