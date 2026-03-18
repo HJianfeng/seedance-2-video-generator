@@ -19,8 +19,8 @@ import requests
 # Load .env from current directory or project root
 load_dotenv()
 
-IMG2VID_URL = "https://api.loova.ai/v1/img2vid"
-VIDEO_ITEM_URL = "https://api.loova.ai/v1/video_item"
+IMG2VID_URL = "https://api.loova.ai/api/v1/video/seedance-2"
+VIDEO_ITEM_URL = "https://api.loova.ai/v1/tasks"
 POLL_INTERVAL_SEC = 120
 MAX_POLL_COUNT = 50  # ~3 hours at 120s interval (generation can take up to 3 hours)
 

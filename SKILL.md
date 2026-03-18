@@ -93,8 +93,8 @@ Arguments: `--prompt` (required), `--model`, `--duration`, `--ratio`, `--functio
 
 ## API Flow
 
-1. **Submit** – `POST https://api.loova.ai/v1/img2vid` with `Authorization: Bearer <API_KEY>`; response contains `task_id`.
-2. **Poll** – `GET https://api.loova.ai/v1/video_item?task_id=<task_id>` every few seconds until status is succeeded or failed.
+1. **Submit** – `POST https://api.loova.ai/api/v1/video/seedance-2` with `Authorization: Bearer <API_KEY>`; response contains `task_id`.
+2. **Poll** – `GET https://api.loova.ai/v1/tasks?task_id=<task_id>` every few seconds until status is succeeded or failed.
 3. **Result** – Response includes the video result (e.g. URL). Script prints full JSON.
 
 ## Parameters Summary

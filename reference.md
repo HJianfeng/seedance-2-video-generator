@@ -5,9 +5,9 @@
 - Obtain your API key after logging in at [https://loova.ai/](https://loova.ai/).
 - All requests must include the header: `Authorization: Bearer <API_KEY>`.
 
-## 1. Submit Task: POST /v1/img2vid
+## 1. Submit Task: POST /api/v1/video/seedance-2
 
-- **URL**: `https://api.loova.ai/v1/img2vid`
+- **URL**: `https://api.loova.ai/api/v1/video/seedance-2`
 - **Method**: POST
 - **Headers**: `Authorization: Bearer <API_KEY>`. Use **multipart/form-data** (do not use `Content-Type: application/json`).
 - **Form fields**: `model` (string), `params` (JSON string of prompt, ratio, duration, functionMode).
@@ -26,9 +26,9 @@
 
 **Response**: Contains `task_id` for polling the result.
 
-## 2. Get Result: GET /v1/video_item
+## 2. Get Result: GET /v1/tasks
 
-- **URL**: `https://api.loova.ai/v1/video_item?task_id=<task_id>`
+- **URL**: `https://api.loova.ai/v1/tasks?task_id=<task_id>`
 - **Method**: GET
 - **Headers**: `Authorization: Bearer <API_KEY>`
 - **Usage**: Poll until the task status is completed or failed, then read the video result (e.g. URL) from the response.

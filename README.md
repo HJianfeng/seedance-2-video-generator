@@ -8,8 +8,8 @@ End-to-end AI video generation using the Loova Seedance 2.0 API. Create videos f
 
 ## Overview
 
-- **Submit** – `POST https://api.loova.ai/v1/img2vid` to create a video generation task
-- **Poll** – `GET https://api.loova.ai/v1/video_item?task_id=...` until the task completes
+- **Submit** – `POST https://api.loova.ai/api/v1/video/seedance-2` to create a video generation task
+- **Poll** – `GET https://api.loova.ai/v1/tasks?task_id=...` until the task completes
 - **Auth** – `Authorization: Bearer <API_KEY>`; get your API key after logging in at [loova.ai](https://loova.ai/)
 
 ## Upload to ClawHub
