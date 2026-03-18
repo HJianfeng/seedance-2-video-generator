@@ -31,7 +31,7 @@ Upload this repository (or the skill folder) to ClawHub for OpenClaw. Expected s
 
 ### 1. Get API key
 
-Open [https://loova.ai/](https://loova.ai/) in a browser, log in, and obtain the API key from DevTools (Network requests or Application → Local Storage).
+Open [https://loova.ai/api](https://loova.ai/api) in a browser, sign in to your account, and get your API key from the Loova API page.
 
 ### 2. Configure credentials
 

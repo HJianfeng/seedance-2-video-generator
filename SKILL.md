@@ -5,6 +5,8 @@ description: Generates video via Loova Seedance 2.0 API (Seedance 2.0 video). Re
 env:
   required:
     - LOOVA_API_KEY
+credentials:
+  primary: LOOVA_API_KEY
 ---
 
 # Seedance 2.0 Video Generator

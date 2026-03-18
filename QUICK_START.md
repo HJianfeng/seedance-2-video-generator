@@ -4,8 +4,8 @@ Generate AI videos from text prompts or images using the Loova Seedance 2.0 API.
 
 ## 1. Get your API key
 
-1. Open [https://loova.ai/](https://loova.ai/) and log in.
-2. Get your API key from browser DevTools (Network tab or Application → Local Storage).
+1. Open [https://loova.ai/api](https://loova.ai/api) and log in.
+2. Get your API key from the Loova API page in your Loova account.
 3. Create a `.env` file in the project root (or next to the script):
 
 ```bash
