@@ -11,8 +11,9 @@ Generate AI videos from text prompts or images using the Loova Seedance 2.0 API 
 ## Capabilities
 
 1. **Image/Text to Video** – Loova Seedance 2.0 video API with Seedance 2.0 or Seedance 2.0 Fast
-2. **Prompt-driven** – Supports @ reference syntax and optional media files as FormData (File uploads; works with OpenClaw image/video/audio uploads)
+2. **Prompt-driven** – Supports @ reference syntax and optional media files as FormData (File uploads)
 3. **Configurable** – Duration (4–15s), aspect ratio, function mode (first/last frame or omni reference)
+4. **Attachment-friendly workflow** – When the user provides images/videos/audios in chat, **save them locally under the OpenClaw workspace (e.g. `workspace/assets/`) and pass the saved paths via `--files`**; if the user provides URLs, prefer `--image-urls/--video-urls/--audio-urls`.
 
 ## Quick Start
 
