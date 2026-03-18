@@ -64,7 +64,7 @@ Requires: `requests`, `python-dotenv`.
 
 ### Via OpenClaw / Agent
 
-The agent uses this Skill when the user mentions Loova video, Seedance 2.0, or image-to-video. It can run the script with the appropriate `--prompt` and optional `--files`, `--duration`, `--ratio`, etc.
+The agent uses this Skill when the user mentions Loova video, Seedance 2.0, text-to-video, or image-to-video. It can run the script with the appropriate `--prompt` and optional `--files`, `--duration`, `--ratio`, etc.
 
 ### Run the script locally
 
