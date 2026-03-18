@@ -252,6 +252,7 @@ def submit_task(api_key: str, args: argparse.Namespace) -> str:
             # multipart/form-data (file upload)
             data = {
                 "model": args.model,
+                "prompt": args.prompt,
                 "params": json.dumps(params),
             }
             resp = requests.post(
