@@ -2,14 +2,8 @@
 name: seedance-2-ai-video-generator
 displayName: Seedance 2.0 AI Video Generator (Text to Video, Image to Video, Reference to Video)
 description: Generates video via Loova Seedance 2.0 API (Seedance 2.0 video). Requires LOOVA_API_KEY from .env or environment (get API key at loova.ai). Use when the user asks for Loova, Seedance 2.0, image-to-video, or Seedance 2.0 video.
-env:
-  required:
-    - LOOVA_API_KEY
-credentials:
-  primary: LOOVA_API_KEY
-required_env_vars:
-  - LOOVA_API_KEY
-primary_credential: LOOVA_API_KEY
+
+metadata: {"openclaw":{"homepage":"https://api.loova.ai/api","requires":{"bins":[],"env":["LOOVA_API_KEY"]},"primaryEnv":"LOOVA_API_KEY"}}
 ---
 
 # Seedance 2.0 Video Generator
@@ -104,6 +98,7 @@ python scripts/run_seedance.py --prompt "Ocean waves" --model seedance_2_0_fast 
 
 Arguments: `--prompt` (required), `--model`, `--duration`, `--ratio`, `--function-mode`, `--files` (comma-separated local paths; sent as multipart File uploads).
 URL inputs: `--image-urls`, `--video-urls`, `--audio-urls` (comma-separated). When no files are uploaded, the request uses `Content-Type: application/json`; when uploading files it uses `multipart/form-data`.
+Note: for multipart uploads, let the HTTP client set `Content-Type` with boundary automatically; do not set `Content-Type` manually.
 
 ## API Flow
 

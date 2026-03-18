@@ -255,7 +255,6 @@ def submit_task(api_key: str, args: argparse.Namespace) -> str:
                 VID_URL,
                 headers={
                     "Authorization": f"Bearer {api_key}",
-                    "Content-Type": "multipart/form-data",
                 },
                 data=data,
                 files=file_tuples,
