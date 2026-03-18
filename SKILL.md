@@ -1,19 +1,23 @@
 ---
-name: seedance-2-video-generator
-displayName: Seedance 2.0 Video Generator
+name: seedance-2-ai-video-generator
+displayName: Seedance 2.0 AI Video Generator (Text to Video, Image to Video, Reference to Video)
 description: Generates video via Loova Seedance 2.0 API (Seedance 2.0 video). Requires LOOVA_API_KEY from .env or environment (get API key at loova.ai). Use when the user asks for Loova, Seedance 2.0, image-to-video, or Seedance 2.0 video.
 ---
 
 # Seedance 2.0 Video Generator
 
-Generate AI videos from text prompts or images using the Loova Seedance 2.0 API (Seedance 2.0 video). Submit a job, poll for completion, and get the video result. **Generation may take up to 3 hours**; poll **once per minute** and return to the user immediately when status becomes **succeeded** or **failed** (or any terminal error state). **Stop polling immediately on failure/error** and return the error details to the user.
+Create AI videos from text or images using the latest multi-modal reference system with the Loova Seedance 2.0 API (Seedance 2.0 Video). Submit a job, poll for completion, and get the video result. **Generation may take up to 3 hours**; poll **once per minute** and return to the user immediately when status becomes **succeeded** or **failed** (or any terminal error state). **Stop polling immediately on failure/error** and return the error details to the user.
 
 ## Capabilities
 
-1. **Image/Text to Video** – Loova Seedance 2.0 video API with Seedance 2.0 or Seedance 2.0 Fast
-2. **Prompt-driven** – Supports @ reference syntax and optional media files as FormData (File uploads)
-3. **Configurable** – Duration (4–15s), aspect ratio, function mode (first/last frame or omni reference)
-4. **Attachment-friendly workflow** – Prefer passing media by URL when the user provides a URL: use `--image-urls/--video-urls/--audio-urls` (no download needed). When the user provides inline chat attachments (images/videos/audios), **save them locally under the OpenClaw workspace (e.g. `workspace/assets/`) and pass the saved paths via `--files`**. If both URLs and files are provided for the same media type, **URLs take precedence** (same-type files will be ignored).
+1. **Image to Video** – Turn images into videos using the Loova Seedance 2.0 Video API, powered by Seedance 2.0 or Seedance 2.0 Fast.
+1. **Text to Video** – Convert text into videos with the Loova Seedance 2.0 Video API, powered by Seedance 2.0 or Seedance 2.0 Fast.
+2. **Multi-Modal Reference System** – Supports multiple input types, including text, images, videos, and audio. These inputs can be used as references for different parts of your video.
+3. **Configurable Settings** – Customize duration (4–15 seconds), aspect ratio, and function mode (first frame, last frame, or omni reference).
+4. **Attachment-friendly workflow** 
+  - When users provide media via URL, pass it directly using --image-urls, --video-urls, or --audio-urls (no download required).
+  - When users upload files in chat (images, videos, or audio), save them locally in the OpenClaw workspace (e.g., workspace/assets/) and pass the file paths via --files.
+  - If both URLs and local files are provided for the same media type, URLs take precedence (local files of the same type will be ignored).
 
 ## Quick Start
 
