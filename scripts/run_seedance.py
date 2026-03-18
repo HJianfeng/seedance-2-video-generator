@@ -20,8 +20,8 @@ import requests
 load_dotenv()
 
 VID_URL = "https://api.loova.ai/api/v1/video/seedance-2"
-VIDEO_ITEM_URL = "https://api.loova.ai/v1/tasks"
-POLL_INTERVAL_SEC = 60
+VIDEO_ITEM_URL = "https://api.loova.ai/api/v1/tasks"
+POLL_INTERVAL_SEC = 60  # Poll once per minute
 MAX_POLL_COUNT = 180  # ~3 hours at 60s interval (generation can take up to 3 hours)
 
 # Limits per function mode (omni_reference)

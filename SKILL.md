@@ -6,7 +6,7 @@ description: Generates video via Loova Seedance 2.0 API (Seedance 2.0 video). Re
 
 # Seedance 2.0 Video Generator
 
-Generate AI videos from text prompts or images using the Loova Seedance 2.0 API (Seedance 2.0 video). Submit a job, poll for completion, and get the video result. **Generation may take up to 3 hours**; the script notifies the user and keeps polling until done.
+Generate AI videos from text prompts or images using the Loova Seedance 2.0 API (Seedance 2.0 video). Submit a job, poll for completion, and get the video result. **Generation may take up to 3 hours**; poll **once per minute** and return to the user immediately when status becomes **succeeded** or **failed** (or any terminal error state). **Stop polling immediately on failure/error** and return the error details to the user.
 
 ## Capabilities
 
