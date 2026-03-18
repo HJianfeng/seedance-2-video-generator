@@ -7,6 +7,9 @@ env:
     - LOOVA_API_KEY
 credentials:
   primary: LOOVA_API_KEY
+required_env_vars:
+  - LOOVA_API_KEY
+primary_credential: LOOVA_API_KEY
 ---
 
 # Seedance 2.0 Video Generator
