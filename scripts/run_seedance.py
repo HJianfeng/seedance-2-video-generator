@@ -253,7 +253,10 @@ def submit_task(api_key: str, args: argparse.Namespace) -> str:
                 data.append(("audio_urls", u))
             resp = requests.post(
                 VID_URL,
-                headers={"Authorization": f"Bearer {api_key}"},
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "multipart/form-data",
+                },
                 data=data,
                 files=file_tuples,
                 timeout=120,
