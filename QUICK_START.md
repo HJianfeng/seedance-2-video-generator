@@ -53,7 +53,7 @@ The script submits the job, polls until the video is ready, and prints the resul
 
 | Script | Description |
 |--------|-------------|
-| `scripts/run_seedance.py` | Submit img2vid job and poll for result (prompt, optional images, duration, ratio) |
+| `scripts/run_seedance.py` | Submit Seedance 2.0 video job and poll for result (prompt, optional images, duration, ratio) |
 
 ## Parameters
 

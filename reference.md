@@ -1,4 +1,4 @@
-# Loova img2vid API Reference
+# Loova Seedance 2.0 Video API Reference
 
 ## Authentication
 
@@ -7,11 +7,16 @@
 
 ## 1. Submit Task: POST /api/v1/video/seedance-2
 
+This is the **single** Seedance 2.0 generation endpoint for both:
+
+- Text-to-video (no media inputs)
+- Image-to-video / video reference / audio reference (optional media inputs)
+
 - **URL**: `https://api.loova.ai/api/v1/video/seedance-2`
 - **Method**: POST
 - **Headers**: `Authorization: Bearer <API_KEY>`. Use **multipart/form-data** (do not use `Content-Type: application/json`).
-- **Form fields**: `model` (string), `params` (JSON string of prompt, ratio, duration, functionMode).
-- **Form files**: `files` – one or more File parts (images, video, or audio). Fits OpenClaw file uploads.
+- **Form fields**: `model` (string), `params` (JSON string of prompt, ratio, duration, functionMode, and optional media URLs).
+- **Form files**: `files` – optional File parts (images, video, or audio).
 
 
 | Field                 | Type          | Required | Description                                                                                       |
@@ -20,7 +25,10 @@
 | `params`              | object        | Yes      | Generation parameters                                                                             |
 | `params.prompt`       | string        | Yes      | Prompt; supports @ reference syntax                                                               |
 | `params.functionMode` | string        | No       | `first_last_frames` (first/last frame) / `omni_reference` (omni mode)                             |
-| (multipart) `files`   | File[]        | No       | Media files (images/video/audio) sent as multipart/form-data File parts; same as OpenClaw uploads |
+| (multipart) `files`   | File[]        | No       | Optional media files (images/video/audio) sent as multipart/form-data File parts                  |
+| `params.image_urls`   | string[]      | No       | Optional image URL list                                                                           |
+| `params.video_urls`   | string[]      | No       | Optional video URL list                                                                           |
+| `params.audio_urls`   | string[]      | No       | Optional audio URL list                                                                           |
 | `params.ratio`        | string        | No       | Video aspect ratio, default `16:9`                                                                |
 | `params.aspect_ratio` | string        | No       | Video aspect ratio (legacy), default `16:9`                                                       |
 | `params.duration`     | number/string | No       | Duration in seconds, 4–15, default `5`                                                            |

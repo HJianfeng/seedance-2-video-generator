@@ -1,16 +1,16 @@
 ---
 name: seedance-2-video-generator
 displayName: Seedance 2.0 Video Generator
-description: Generates video via Loova Seedance 2.0 API (img2vid). Requires LOOVA_API_KEY from .env or environment (get API key at loova.ai). Use when the user asks for Loova, Seedance 2.0, image-to-video, or img2vid.
+description: Generates video via Loova Seedance 2.0 API (Seedance 2.0 video). Requires LOOVA_API_KEY from .env or environment (get API key at loova.ai). Use when the user asks for Loova, Seedance 2.0, image-to-video, or Seedance 2.0 video.
 ---
 
 # Seedance 2.0 Video Generator
 
-Generate AI videos from text prompts or images using the Loova Seedance 2.0 API (img2vid). Submit a job, poll for completion, and get the video result. **Generation may take up to 3 hours**; the script notifies the user and keeps polling until done.
+Generate AI videos from text prompts or images using the Loova Seedance 2.0 API (Seedance 2.0 video). Submit a job, poll for completion, and get the video result. **Generation may take up to 3 hours**; the script notifies the user and keeps polling until done.
 
 ## Capabilities
 
-1. **Image/Text to Video** – Loova img2vid API with Seedance 2.0 or Seedance 2.0 Fast
+1. **Image/Text to Video** – Loova Seedance 2.0 video API with Seedance 2.0 or Seedance 2.0 Fast
 2. **Prompt-driven** – Supports @ reference syntax and optional media files as FormData (File uploads; works with OpenClaw image/video/audio uploads)
 3. **Configurable** – Duration (4–15s), aspect ratio, function mode (first/last frame or omni reference)
 
@@ -87,7 +87,7 @@ python scripts/run_seedance.py --prompt "Ocean waves" --model seedance_2_0_fast 
 
 | Script | Description |
 |--------|-------------|
-| `scripts/run_seedance.py` | Submit img2vid task and poll until done; prints result JSON (includes video URL on success) |
+| `scripts/run_seedance.py` | Submit Seedance 2.0 video task and poll until done; prints result JSON (includes video URL on success) |
 
 Arguments: `--prompt` (required), `--model`, `--duration`, `--ratio`, `--function-mode`, `--files` (comma-separated local paths; sent as multipart File uploads).
 

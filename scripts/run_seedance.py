@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Seedance 2.0 Video Generator – Loova img2vid script.
+Seedance 2.0 Video Generator – Loova Seedance 2.0 script.
 Loads LOOVA_API_KEY from environment or .env file.
 Usage: python scripts/run_seedance.py --prompt "prompt" [--model ...] [--duration 5] [--ratio "16:9"] [--files "path1.jpg,path2.jpg"] [--image-urls "https://...,..."] [--video-urls "..."] [--audio-urls "..."]
 Sends request as multipart/form-data: params as JSON field, media as File parts (images/video/audio).
@@ -19,7 +19,7 @@ import requests
 # Load .env from current directory or project root
 load_dotenv()
 
-IMG2VID_URL = "https://api.loova.ai/api/v1/video/seedance-2"
+VID_URL = "https://api.loova.ai/api/v1/video/seedance-2"
 VIDEO_ITEM_URL = "https://api.loova.ai/v1/tasks"
 POLL_INTERVAL_SEC = 60
 MAX_POLL_COUNT = 50  # ~3 hours at 120s interval (generation can take up to 3 hours)
@@ -232,7 +232,7 @@ def submit_task(api_key: str, args: argparse.Namespace) -> str:
     file_tuples = open_files_for_upload(upload_paths) if upload_paths else []
     try:
         resp = requests.post(
-            IMG2VID_URL,
+            VID_URL,
             headers={"Authorization": f"Bearer {api_key}"},
             data=data,
             files=file_tuples,
