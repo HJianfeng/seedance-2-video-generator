@@ -212,7 +212,7 @@ def open_files_for_upload(paths: List[str]) -> List[Tuple[str, Tuple[str, Any, s
 
 
 def get_api_key() -> str:
-    key = os.environ.get("LOOVA_API_KEY", "").strip()
+    key = os.environ.get("LOOVA_API_KEY", "").strip() or os.environ.get("LOOAI_API_KEY", "").strip()
     if not key:
         print(
             "Error: Set LOOVA_API_KEY in .env or environment (obtain it after logging in at https://loova.ai/)",
