@@ -19,6 +19,12 @@ import requests
 # Load .env from current directory or project root
 load_dotenv()
 
+# If a skill-local .env exists (common in OpenClaw skill installs), load it too.
+# This makes the script work regardless of where it's executed from.
+_skill_env = os.path.join(os.path.dirname(__file__), "..", ".env")
+if os.path.exists(_skill_env):
+    load_dotenv(_skill_env)
+
 VID_URL = "https://api.loova.ai/api/v1/video/seedance-2"
 VIDEO_ITEM_URL = "https://api.loova.ai/api/v1/tasks"
 POLL_INTERVAL_SEC = 60  # Poll once per minute
@@ -322,6 +328,25 @@ def poll_result(api_key: str, task_id: str) -> dict:
     raise RuntimeError("Polling timed out (max wait ~3 hours)")
 
 
+def _task_queue_path() -> str:
+    # Persist queue outside the skill directory so updates don't wipe it.
+    return os.path.expanduser("~/.openclaw/seedance_tasks.jsonl")
+
+
+def _append_task_queue(record: dict) -> None:
+    path = _task_queue_path()
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def _iso_utc_now() -> str:
+    # Avoid importing datetime at top-level; keep lightweight.
+    import datetime as _dt
+
+    return _dt.datetime.now(_dt.timezone.utc).isoformat()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Seedance 2.0 Video Generator")
     parser.add_argument("--prompt", required=True, help="Prompt text")
@@ -333,6 +358,11 @@ def main() -> None:
     parser.add_argument("--image-urls", help="Comma-separated image URLs (no multipart upload)")
     parser.add_argument("--video-urls", help="Comma-separated video URLs (no multipart upload)")
     parser.add_argument("--audio-urls", help="Comma-separated audio URLs (no multipart upload)")
+
+    # Behavior flags
+    parser.add_argument("--submit-only", action="store_true", help="Submit and exit (do not poll).")
+    parser.add_argument("--watch", action="store_true", help="Poll until done (may take up to 3 hours).")
+
     args = parser.parse_args()
     args.files = [p.strip() for p in args.files.split(",") if p.strip()] if args.files else None
     args.image_urls = normalize_url_list(args.image_urls)
@@ -349,10 +379,34 @@ def main() -> None:
     )
     api_key = get_api_key()
     task_id = submit_task(api_key, args)
-    print("task_id:", task_id, file=sys.stderr)
-    print("Note: Generation may take up to 3 hours depending on load.", file=sys.stderr)
+
+    # Persist task + prompt/params summary for later polling + proactive notifications.
+    record = {
+        "task_id": task_id,
+        "created_at": _iso_utc_now(),
+        "model": args.model,
+        "ratio": args.ratio,
+        "duration": args.duration,
+        "function_mode": args.function_mode,
+        "prompt": args.prompt,
+        "files": args.files or [],
+        "image_urls": args.image_urls or [],
+        "video_urls": args.video_urls or [],
+        "audio_urls": args.audio_urls or [],
+        "notified": False,
+    }
+    _append_task_queue(record)
+
+    # Always emit a single-line JSON summary to stdout (easy to parse, low noise).
+    print(json.dumps({"task_id": task_id, "model": args.model, "ratio": args.ratio, "duration": args.duration}, ensure_ascii=False))
+
+    # Default: submit-only (avoid long-running exec that can be SIGTERM'd)
+    if args.submit_only or (not args.watch):
+        return
+
+    # Optional: watch in this process.
     result = poll_result(api_key, task_id)
-    print(json.dumps(result, indent=2))
+    print(json.dumps(result, ensure_ascii=False))
 
 
 if __name__ == "__main__":
