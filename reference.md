@@ -14,9 +14,12 @@ This is the **single** Seedance 2.0 generation endpoint for both:
 
 - **URL**: `https://api.loova.ai/api/v1/video/seedance-2`
 - **Method**: POST
-- **Headers**: `Authorization: Bearer <API_KEY>`. Use **multipart/form-data** (do not use `Content-Type: application/json`).
-- **Form fields**: `model` (string), `params` (JSON string of prompt, ratio, duration, functionMode, and optional media URLs).
-- **Form files**: `files` – optional File parts (images, video, or audio).
+- **Headers**:
+  - With file upload (`files` provided): `Authorization: Bearer <API_KEY>` and use **multipart/form-data**
+  - Without file upload: `Authorization: Bearer <API_KEY>`, `Content-Type: application/json`
+- **Body**:
+  - multipart/form-data: `model` (string), `params` (JSON string), optional `files` parts
+  - application/json: `{ "model": string, "params": object }`
 
 
 | Field                 | Type          | Required | Description                                                                                       |

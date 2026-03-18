@@ -219,10 +219,6 @@ def submit_task(api_key: str, args: argparse.Namespace) -> str:
     if args.audio_urls:
         params["audio_urls"] = args.audio_urls
 
-    data = {
-        "model": args.model,
-        "params": json.dumps(params),
-    }
     upload_paths = filter_files_by_url_overrides(
         file_paths=args.files or [],
         image_urls=args.image_urls or [],
@@ -231,13 +227,34 @@ def submit_task(api_key: str, args: argparse.Namespace) -> str:
     )
     file_tuples = open_files_for_upload(upload_paths) if upload_paths else []
     try:
-        resp = requests.post(
-            VID_URL,
-            headers={"Authorization": f"Bearer {api_key}"},
-            data=data,
-            files=file_tuples,
-            timeout=120,
-        )
+        if file_tuples:
+            # multipart/form-data (file upload)
+            data = {
+                "model": args.model,
+                "params": json.dumps(params),
+            }
+            resp = requests.post(
+                VID_URL,
+                headers={"Authorization": f"Bearer {api_key}"},
+                data=data,
+                files=file_tuples,
+                timeout=120,
+            )
+        else:
+            # application/json (no file upload)
+            payload = {
+                "model": args.model,
+                "params": params,
+            }
+            resp = requests.post(
+                VID_URL,
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json",
+                },
+                json=payload,
+                timeout=120,
+            )
     finally:
         for _key, (_, f, _) in file_tuples:
             f.close()
