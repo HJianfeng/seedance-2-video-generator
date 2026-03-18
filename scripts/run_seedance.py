@@ -2,7 +2,7 @@
 """
 Seedance 2.0 Video Generator – Loova img2vid script.
 Loads LOOVA_API_KEY from environment or .env file.
-Usage: python scripts/run_seedance.py --prompt "prompt" [--model ...] [--duration 5] [--ratio "16:9"] [--files "path1.jpg,path2.jpg"]
+Usage: python scripts/run_seedance.py --prompt "prompt" [--model ...] [--duration 5] [--ratio "16:9"] [--files "path1.jpg,path2.jpg"] [--image-urls "https://...,..."] [--video-urls "..."] [--audio-urls "..."]
 Sends request as multipart/form-data: params as JSON field, media as File parts (images/video/audio).
 """
 import argparse
@@ -21,7 +21,7 @@ load_dotenv()
 
 IMG2VID_URL = "https://api.loova.ai/api/v1/video/seedance-2"
 VIDEO_ITEM_URL = "https://api.loova.ai/v1/tasks"
-POLL_INTERVAL_SEC = 120
+POLL_INTERVAL_SEC = 60
 MAX_POLL_COUNT = 50  # ~3 hours at 120s interval (generation can take up to 3 hours)
 
 # Limits per function mode (omni_reference)
@@ -46,6 +46,40 @@ def _media_type(path: str) -> str:
     return "other"
 
 
+def _validate_media_counts_by_function_mode(
+    *,
+    image_count: int,
+    video_count: int,
+    audio_count: int,
+    function_mode: Optional[str],
+) -> None:
+    """
+    Validate media counts by function mode.
+    - omni_reference: images <= 9, videos <= 3, audio <= 3.
+    - first_last_frames: at least 1 image.
+    """
+    if function_mode == "first_last_frames":
+        if image_count < FIRST_LAST_MIN_IMAGES:
+            raise ValueError(
+                f"function-mode first_last_frames requires at least {FIRST_LAST_MIN_IMAGES} image file(s), got {image_count}."
+            )
+        return
+
+    if function_mode == "omni_reference":
+        if image_count > OMNI_MAX_IMAGES:
+            raise ValueError(
+                f"function-mode omni_reference allows at most {OMNI_MAX_IMAGES} image(s), got {image_count}."
+            )
+        if video_count > OMNI_MAX_VIDEOS:
+            raise ValueError(
+                f"function-mode omni_reference allows at most {OMNI_MAX_VIDEOS} video(s), got {video_count}."
+            )
+        if audio_count > OMNI_MAX_AUDIO:
+            raise ValueError(
+                f"function-mode omni_reference allows at most {OMNI_MAX_AUDIO} audio file(s), got {audio_count}."
+            )
+
+
 def validate_files_by_function_mode(paths: List[str], function_mode: Optional[str]) -> None:
     """
     Validate file counts by function mode.
@@ -53,10 +87,6 @@ def validate_files_by_function_mode(paths: List[str], function_mode: Optional[st
     - first_last_frames: at least 1 image.
     """
     if not paths:
-        if function_mode == "first_last_frames":
-            raise ValueError(
-                f"function-mode first_last_frames requires at least {FIRST_LAST_MIN_IMAGES} image file(s)."
-            )
         return
     by_type: dict[str, List[str]] = {"image": [], "video": [], "audio": [], "other": []}
     for p in paths:
@@ -66,31 +96,84 @@ def validate_files_by_function_mode(paths: List[str], function_mode: Optional[st
         t = _media_type(p)
         by_type[t].append(p)
     images, videos, audios = by_type["image"], by_type["video"], by_type["audio"]
-
-    if function_mode == "first_last_frames":
-        if len(images) < FIRST_LAST_MIN_IMAGES:
-            raise ValueError(
-                f"function-mode first_last_frames requires at least {FIRST_LAST_MIN_IMAGES} image file(s), got {len(images)}."
-            )
-        return
-    if function_mode == "omni_reference":
-        if len(images) > OMNI_MAX_IMAGES:
-            raise ValueError(
-                f"function-mode omni_reference allows at most {OMNI_MAX_IMAGES} image(s), got {len(images)}."
-            )
-        if len(videos) > OMNI_MAX_VIDEOS:
-            raise ValueError(
-                f"function-mode omni_reference allows at most {OMNI_MAX_VIDEOS} video(s), got {len(videos)}."
-            )
-        if len(audios) > OMNI_MAX_AUDIO:
-            raise ValueError(
-                f"function-mode omni_reference allows at most {OMNI_MAX_AUDIO} audio file(s), got {len(audios)}."
-            )
+    _validate_media_counts_by_function_mode(
+        image_count=len(images),
+        video_count=len(videos),
+        audio_count=len(audios),
+        function_mode=function_mode,
+    )
 
 
 def validate_prompt_required(prompt: Optional[str]) -> None:
     if not prompt or not prompt.strip():
         raise ValueError("prompt is required (non-empty).")
+
+
+def validate_media_inputs_by_function_mode(
+    *,
+    file_paths: List[str],
+    image_urls: List[str],
+    video_urls: List[str],
+    audio_urls: List[str],
+    function_mode: Optional[str],
+) -> None:
+    """
+    Validate media counts by function mode.
+    If URLs are provided for a media type, they take precedence and the same-type local files are ignored.
+    """
+    file_images = 0
+    file_videos = 0
+    file_audios = 0
+    for p in file_paths:
+        t = _media_type(p)
+        if t == "image":
+            file_images += 1
+        elif t == "video":
+            file_videos += 1
+        elif t == "audio":
+            file_audios += 1
+
+    effective_images = len(image_urls) if image_urls else file_images
+    effective_videos = len(video_urls) if video_urls else file_videos
+    effective_audios = len(audio_urls) if audio_urls else file_audios
+
+    _validate_media_counts_by_function_mode(
+        image_count=effective_images,
+        video_count=effective_videos,
+        audio_count=effective_audios,
+        function_mode=function_mode,
+    )
+
+
+def filter_files_by_url_overrides(
+    *,
+    file_paths: List[str],
+    image_urls: List[str],
+    video_urls: List[str],
+    audio_urls: List[str],
+) -> List[str]:
+    """
+    If URLs are provided for a media type, drop same-type local files from upload.
+    """
+    if not file_paths:
+        return []
+    has_image_urls = bool(image_urls)
+    has_video_urls = bool(video_urls)
+    has_audio_urls = bool(audio_urls)
+    if not (has_image_urls or has_video_urls or has_audio_urls):
+        return file_paths
+
+    filtered: List[str] = []
+    for p in file_paths:
+        t = _media_type(p)
+        if t == "image" and has_image_urls:
+            continue
+        if t == "video" and has_video_urls:
+            continue
+        if t == "audio" and has_audio_urls:
+            continue
+        filtered.append(p)
+    return filtered
 
 
 def open_files_for_upload(paths: List[str]) -> List[Tuple[str, Tuple[str, Any, str]]]:
@@ -129,12 +212,24 @@ def submit_task(api_key: str, args: argparse.Namespace) -> str:
     }
     if args.function_mode:
         params["functionMode"] = args.function_mode
+    if args.image_urls:
+        params["image_urls"] = args.image_urls
+    if args.video_urls:
+        params["video_urls"] = args.video_urls
+    if args.audio_urls:
+        params["audio_urls"] = args.audio_urls
 
     data = {
         "model": args.model,
         "params": json.dumps(params),
     }
-    file_tuples = open_files_for_upload(args.files) if args.files else []
+    upload_paths = filter_files_by_url_overrides(
+        file_paths=args.files or [],
+        image_urls=args.image_urls or [],
+        video_urls=args.video_urls or [],
+        audio_urls=args.audio_urls or [],
+    )
+    file_tuples = open_files_for_upload(upload_paths) if upload_paths else []
     try:
         resp = requests.post(
             IMG2VID_URL,
@@ -187,11 +282,23 @@ def main() -> None:
     parser.add_argument("--ratio", default="16:9", help="Aspect ratio")
     parser.add_argument("--function-mode", help="first_last_frames or omni_reference")
     parser.add_argument("--files", help="Comma-separated local file paths (sent as multipart File uploads: images/video/audio)")
+    parser.add_argument("--image-urls", help="Comma-separated image URLs (no multipart upload)")
+    parser.add_argument("--video-urls", help="Comma-separated video URLs (no multipart upload)")
+    parser.add_argument("--audio-urls", help="Comma-separated audio URLs (no multipart upload)")
     args = parser.parse_args()
     args.files = [p.strip() for p in args.files.split(",") if p.strip()] if args.files else None
+    args.image_urls = [u.strip() for u in args.image_urls.split(",") if u.strip()] if args.image_urls else None
+    args.video_urls = [u.strip() for u in args.video_urls.split(",") if u.strip()] if args.video_urls else None
+    args.audio_urls = [u.strip() for u in args.audio_urls.split(",") if u.strip()] if args.audio_urls else None
 
     validate_prompt_required(args.prompt)
-    validate_files_by_function_mode(args.files or [], args.function_mode)
+    validate_media_inputs_by_function_mode(
+        file_paths=args.files or [],
+        image_urls=args.image_urls or [],
+        video_urls=args.video_urls or [],
+        audio_urls=args.audio_urls or [],
+        function_mode=args.function_mode,
+    )
     api_key = get_api_key()
     task_id = submit_task(api_key, args)
     print("task_id:", task_id, file=sys.stderr)
