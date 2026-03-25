@@ -22,7 +22,7 @@ load_dotenv()
 VID_URL = "https://api.loova.ai/api/v1/video/seedance-2"
 VIDEO_ITEM_URL = "https://api.loova.ai/api/v1/tasks"
 POLL_INTERVAL_SEC = 60  # Poll once per minute
-MAX_POLL_COUNT = 180  # ~3 hours at 60s interval (generation can take up to 3 hours)
+MAX_POLL_COUNT = 180
 
 # Limits per function mode (omni_reference)
 OMNI_MAX_IMAGES = 9
@@ -318,7 +318,7 @@ def poll_result(api_key: str, task_id: str) -> dict:
                 file=sys.stderr,
             )
         time.sleep(POLL_INTERVAL_SEC)
-    raise RuntimeError("Polling timed out (max wait ~3 hours)")
+    raise RuntimeError("Polling timed out")
 
 
 def main() -> None:
@@ -349,7 +349,6 @@ def main() -> None:
     api_key = get_api_key()
     task_id = submit_task(api_key, args)
     print("task_id:", task_id, file=sys.stderr)
-    print("Note: Generation may take up to 3 hours depending on load.", file=sys.stderr)
     result = poll_result(api_key, task_id)
     print(json.dumps(result, indent=2))
 
